@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ test.title }}{% endblock %}
+
+{% block content %}
+<div class="row mt-5">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm border-0 rounded-4 p-5">
+            <h1 class="fw-bold mb-4">{{ test.title }}</h1>
+            <p class="text-muted mb-5">Bo'sh joylarni (______) to'ldiring.</p>
+
+            <form method="post" class="test-form">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="card border-0 shadow-sm mb-4 rounded-3 p-4">
+                        <label class="form-label fw-bold text-dark mb-3">{{ forloop.counter }}. {{ field.label|safe }}</label>
+                        
+                        {% if field.field.is_mcq %}
+                            <div class="options-group ps-3">
+                                {% for radio in field %}
+                                    <div class="form-check mb-2 py-1">
+                                        {{ radio.tag }}
+                                        <label class="form-check-label ms-2 cursor-pointer" for="{{ radio.id_for_label }}">
+                                            {{ radio.choice_label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        
+                        {% if field.errors %}
+                            <div class="text-danger mt-1 small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                        Testni yakunlash <i class="bi bi-send-fill ms-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

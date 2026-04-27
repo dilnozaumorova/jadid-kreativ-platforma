@@ -1,0 +1,82 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/" style="font-size: 0.9rem;">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" style="height: 60px; width: auto;" class="me-2">
+            BOSH SAHIFA
+        </a>
+
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="topNavbar">
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/normative-documents/' in request.path %}active{% endif %}" href="{% url 'moduls:normative_documents_list' %}">Normativ-huquqiy hujjatlar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/lectures/' in request.path %}active{% endif %}" href="{% url 'moduls:lecture_list' %}">Ma'ruza</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/practice/' in request.path or '/table-practice/' in request.path %}active{% endif %}" href="{% url 'moduls:practice_list' %}">Amaliy mashg'ulot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/seminars/' in request.path or '/seminar-question/' in request.path or '/seminar-table/' in request.path %}active{% endif %}" href="{% url 'moduls:seminar_list' %}">Seminar mashg'ulot</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/tasks/' in request.path %}active{% endif %}" href="{% url 'moduls:task_list' %}">Mustaqil ta'lim</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/creative-tasks/' in request.path %}active{% endif %}" href="{% url 'moduls:creative_tasks' %}">Kreativ topshiriqlar banki</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 {% if '/resources/' in request.path %}active{% endif %}" href="{% url 'moduls:resource_list' %}">ARM</a>
+                </li>
+                 <li class="nav-item">
+                        <a class="nav-link px-3 fw-bold text-warning {% if '/tests/' in request.path %}active{% endif %}" href="{% url 'tests:test_list' %}">Nazorat</a>
+                 </li>
+                
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link px-3 fw-bold text-primary {% if '/statistics/' in request.path %}active{% endif %}" href="{% url 'moduls:statistics' %}">
+                        <i class="bi bi-graph-up-arrow me-1"></i> Statistika
+                    </a>
+                </li>
+                {% elif user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link px-3 fw-bold text-success {% if '/my-statistics/' in request.path %}active{% endif %}" href="{% url 'moduls:my_statistics' %}">
+                        <i class="bi bi-trophy me-1"></i> Natijalarim
+                    </a>
+                </li>
+                {% endif %}
+
+                <ul class="navbar-nav ms-auto align-items-center">
+                    {% if not user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{% url 'login' %}">Kirish</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-primary btn-sm px-4" href="{% url 'register' %}">Ro'yxatdan o'tish</a>
+                    </li>
+                    {% else %}
+                   
+                    <li class="nav-item">
+                        <span class="nav-link text-light opacity-75">{{ user.first_name }} {{user.last_name}}</span>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm px-3">Chiqish</button>
+                        </form>
+                    </li>
+                    {% endif %}
+                </ul>
+
+        </div>
+    </div>
+</nav>

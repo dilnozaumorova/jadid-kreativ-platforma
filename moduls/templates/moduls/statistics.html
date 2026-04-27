@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+
+{% block title %}Umumiy Statistika{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="display-5 fw-bold text-dark">📊 Umumiy Statistika</h1>
+        <a href="{% url 'admin:index' %}" class="btn btn-dark rounded-pill px-4">
+            <i class="bi bi-shield-lock me-1"></i> Admin Panel
+        </a>
+    </div>
+
+    <ul class="nav nav-pills mb-4 bg-white p-2 rounded-4 shadow-sm" id="statTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill px-4" id="lectures-tab" data-bs-toggle="pill"
+                data-bs-target="#lectures" type="button" role="tab">Maruzalar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" id="tasks-tab" data-bs-toggle="pill" data-bs-target="#tasks"
+                type="button" role="tab">Topshiriqlar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" id="seminars-tab" data-bs-toggle="pill"
+                data-bs-target="#seminars" type="button" role="tab">Seminarlar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" id="creatives-tab" data-bs-toggle="pill"
+                data-bs-target="#creatives" type="button" role="tab">Kreativ</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" id="practice-tab" data-bs-toggle="pill"
+                data-bs-target="#practice" type="button" role="tab">Amaliyot</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" id="general-tests-tab" data-bs-toggle="pill"
+                data-bs-target="#general-tests" type="button" role="tab">Umumiy Testlar</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="statTabsContent">
+        <!-- Lectures Tab -->
+        <div class="tab-pane fade show active" id="lectures" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Maruza</th>
+                                <th>Ball</th>
+                                <th>Foiz</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for res in lecture_results %}
+                            <tr>
+                                <td class="fw-bold">{{ res.user.username }}</td>
+                                <td>{{ res.lecture.title }}</td>
+                                <td><span class="badge bg-primary">{{ res.score }} / {{ res.total_questions }}</span>
+                                </td>
+                                <td>
+                                    {% widthratio res.score res.total_questions 100 as percent %}
+                                    <div class="progress" style="height: 10px; width: 100px;">
+                                        <div class="progress-bar {% if percent|add:"0" >= 70 %}bg-success{% else %}bg-danger{% endif %}"
+                                            role="progressbar" style="width: {{ percent }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ percent }}%</small>
+                                </td>
+                                <td>{{ res.completed_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div class="tab-pane fade" id="tasks" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Topshiriq</th>
+                                <th>Baho</th>
+                                <th>Holat</th>
+                                <th>Fayl</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in task_submissions %}
+                            <tr>
+                                <td class="fw-bold">{{ sub.user.username }}</td>
+                                <td>{{ sub.task.title }}</td>
+                                <td><span class="badge bg-info">{{ sub.score }}</span></td>
+                                <td>
+                                    {% if sub.is_checked %}
+                                    <span class="badge bg-success">Tekshirildi</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ sub.file.url }}" class="btn btn-sm btn-outline-primary rounded-pill">
+                                        <i class="bi bi-download"></i> Yuklab olish
+                                    </a>
+                                </td>
+                                <td>{{ sub.submitted_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seminars Tab -->
+        <div class="tab-pane fade" id="seminars" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white fw-bold">Seminar Savollari</div>
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Savol</th>
+                                <th>Javob turi</th>
+                                <th>Baho</th>
+                                <th>Holat</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in seminar_submissions %}
+                            <tr>
+                                <td>{{ sub.user.username }}</td>
+                                <td>{{ sub.question.title }}</td>
+                                <td>{{ sub.question.get_question_type_display }}</td>
+                                <td><span class="badge bg-info">{{ sub.score }}</span></td>
+                                <td>
+                                    {% if sub.is_checked %}
+                                    <span class="badge bg-success">Tekshirildi</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ sub.submitted_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white fw-bold">Seminar Jadvallari</div>
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Jadval</th>
+                                <th>Baho</th>
+                                <th>Holat</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in seminar_table_submissions %}
+                            <tr>
+                                <td>{{ sub.user.username }}</td>
+                                <td>{{ sub.table.title }}</td>
+                                <td><span class="badge bg-info">{{ sub.score }}</span></td>
+                                <td>
+                                    {% if sub.is_checked %}
+                                    <span class="badge bg-success">Tekshirildi</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ sub.submitted_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creative Tab -->
+        <div class="tab-pane fade" id="creatives" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Vazifa</th>
+                                <th>Tur</th>
+                                <th>Natija</th>
+                                <th>Baho</th>
+                                <th>Holat</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in creative_submissions %}
+                            <tr>
+                                <td class="fw-bold">{{ sub.user.username }}</td>
+                                <td>{{ sub.task.title }}</td>
+                                <td>{{ sub.task.get_task_type_display }}</td>
+                                <td>
+                                    {% if sub.task.task_type == 'test' %}
+                                    <span class="badge {% if sub.is_correct %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ sub.selected_option }} ({% if sub.is_correct %}To'g'ri{% else %}Noto'g'ri{% endif %})
+                                    </span>
+                                    {% else %}
+                                    <span class="badge bg-info text-dark">Yuborilgan</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="badge bg-info">{{ sub.score }}</span></td>
+                                <td>
+                                    {% if sub.is_checked %}
+                                    <span class="badge bg-success">Tekshirildi</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ sub.submitted_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Tab -->
+        <div class="tab-pane fade" id="practice" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white fw-bold">Amaliyot Savollari</div>
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Vazifa</th>
+                                <th>Tur</th>
+                                <th>Baho</th>
+                                <th>Holat</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in practice_submissions %}
+                            <tr>
+                                <td class="fw-bold">{{ sub.user.username }}</td>
+                                <td>{{ sub.question.title }}</td>
+                                <td>{{ sub.question.get_question_type_display }}</td>
+                                <td><span class="badge bg-info">{{ sub.score }}</span></td>
+                                <td>
+                                    {% if sub.is_checked %}
+                                    <span class="badge bg-success">Tekshirildi</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ sub.submitted_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white fw-bold">Amaliyot Jadvallari</div>
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Jadval nomi</th>
+                                <th>Baho</th>
+                                <th>Holat</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in table_submissions %}
+                            <tr>
+                                <td class="fw-bold">{{ sub.user.username }}</td>
+                                <td>{{ sub.table.title }}</td>
+                                <td><span class="badge bg-info">{{ sub.score }}</span></td>
+                                <td>
+                                    {% if sub.is_checked %}
+                                    <span class="badge bg-success">Tekshirildi</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ sub.submitted_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- General Tests Tab -->
+        <div class="tab-pane fade" id="general-tests" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Foydalanuvchi</th>
+                                <th>Test Nomi</th>
+                                <th>Tur</th>
+                                <th>Ball</th>
+                                <th>Foiz</th>
+                                <th>Sana</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for res in general_test_results %}
+                            <tr>
+                                <td class="fw-bold">{{ res.user.username }}</td>
+                                <td>{{ res.test.title }}</td>
+                                <td>{{ res.test.get_test_type_display }}</td>
+                                <td><span class="badge bg-primary">{{ res.score }} / {{ res.total_questions }}</span></td>
+                                <td>
+                                    {% widthratio res.score res.total_questions 100 as percent %}
+                                    <div class="progress" style="height: 10px; width: 100px;">
+                                        <div class="progress-bar {% if percent|add:"0" >= 70 %}bg-success{% else %}bg-danger{% endif %}"
+                                            role="progressbar" style="width: {{ percent }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ percent }}%</small>
+                                </td>
+                                <td>{{ res.completed_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Hali umumiy testlar topshirilmagan.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-pills .nav-link {
+        color: #6c757d;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #0d6efd;
+        color: white;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    }
+
+    .table thead th {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        border-bottom: 2px solid #f8f9fa;
+    }
+</style>
+{% endblock %}

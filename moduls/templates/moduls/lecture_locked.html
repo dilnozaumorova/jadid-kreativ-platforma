@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Maruza yopiq{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card shadow-lg border-0 rounded-4 p-5">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <i class="bi bi-lock-fill text-danger" style="font-size: 5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-3">Ushbu maruza yopiq!</h2>
+                    <p class="fs-5 text-muted mb-4">
+                        Keyingi maruzaga o'tish uchun avvalgi maruza testidan kamida <strong>70%</strong> ball to'plashingiz kerak.
+                    </p>
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <a href="{% url 'moduls:lecture_list' %}" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                            Maruzalar ro'yxatiga qaytish
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

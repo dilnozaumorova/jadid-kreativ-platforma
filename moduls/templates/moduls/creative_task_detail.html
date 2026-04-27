@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                {% if task.image %}
+                    <img src="{{ task.image.url }}" class="img-fluid w-100" style="max-height: 400px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body p-4 p-md-5">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'moduls:creative_tasks' %}" class="text-decoration-none">Kreativ topshiriqlar</a></li>
+                            <li class="breadcrumb-item active">{{ task.title }}</li>
+                        </ol>
+                    </nav>
+
+                    <h2 class="fw-bold text-dark mb-4">{{ task.title }}</h2>
+                    <div class="fs-5 text-muted mb-5" style="white-space: pre-wrap;">{{ task.content }}</div>
+
+                    {% if user_submission %}
+                        <div class="alert alert-success rounded-4 p-4 border-0 shadow-sm">
+                            <h5 class="fw-bold mb-3"><i class="bi bi-check-circle-fill me-2"></i> Siz ushbu topshiriqni bajargansiz!</h5>
+                            {% if task.task_type == 'test' %}
+                                <p class="mb-0">
+                                    Sizning javobingiz: <strong>{{ user_submission.selected_option }}</strong> 
+                                    {% if user_submission.is_correct %}
+                                        <span class="badge bg-success ms-2">To'g'ri</span>
+                                    {% else %}
+                                        <span class="badge bg-danger ms-2">Noto'g'ri</span>
+                                    {% endif %}
+                                </p>
+                            {% else %}
+                                {% if user_submission.text_answer %}
+                                    <div class="bg-white p-3 rounded-3 mt-2 text-dark border">
+                                        <strong>Javobingiz:</strong><br>{{ user_submission.text_answer }}
+                                    </div>
+                                {% endif %}
+                                {% if user_submission.file_answer %}
+                                    <div class="mt-3">
+                                        <strong>Yuborilgan fayl:</strong> <a href="{{ user_submission.file_answer.url }}" class="btn btn-sm btn-outline-primary ms-2" target="_blank">Ko'rish</a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            <div class="mt-4">
+                                <a href="{% url 'moduls:creative_tasks' %}" class="btn btn-success rounded-pill px-4">Orqaga qaytish</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% if task.task_type == 'test' %}
+                                <div class="card border-0 bg-light rounded-4 p-4 mb-4">
+                                    <h5 class="fw-bold mb-4">To'g'ri javobni tanlang:</h5>
+                                    <div class="d-grid gap-3">
+                                        {% if task.option_a %}
+                                            <div class="form-check custom-radio-card p-3 rounded-3 border bg-white">
+                                                <input class="form-check-input" type="radio" name="option" id="optA" value="A" required>
+                                                <label class="form-check-label w-100 ps-2" for="optA">A) {{ task.option_a }}</label>
+                                            </div>
+                                        {% endif %}
+                                        {% if task.option_b %}
+                                            <div class="form-check custom-radio-card p-3 rounded-3 border bg-white">
+                                                <input class="form-check-input" type="radio" name="option" id="optB" value="B" required>
+                                                <label class="form-check-label w-100 ps-2" for="optB">B) {{ task.option_b }}</label>
+                                            </div>
+                                        {% endif %}
+                                        {% if task.option_c %}
+                                            <div class="form-check custom-radio-card p-3 rounded-3 border bg-white">
+                                                <input class="form-check-input" type="radio" name="option" id="optC" value="C" required>
+                                                <label class="form-check-label w-100 ps-2" for="optC">C) {{ task.option_c }}</label>
+                                            </div>
+                                        {% endif %}
+                                        {% if task.option_d %}
+                                            <div class="form-check custom-radio-card p-3 rounded-3 border bg-white">
+                                                <input class="form-check-input" type="radio" name="option" id="optD" value="D" required>
+                                                <label class="form-check-label w-100 ps-2" for="optD">D) {{ task.option_d }}</label>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="card border-0 bg-light rounded-4 p-4 mb-4">
+                                    <h5 class="fw-bold mb-4">Sizning javobingiz:</h5>
+                                    <div class="mb-4">
+                                        <label class="form-label text-muted small fw-bold">MATNLI JAVOB (Ixtiyoriy)</label>
+                                        <textarea name="text_answer" class="form-control rounded-3" rows="4" placeholder="Javobingizni shu yerga yozing..."></textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small fw-bold">FAYL YUKLASH (Ixtiyoriy)</label>
+                                        <input type="file" name="file_answer" class="form-control rounded-3">
+                                    </div>
+                                    <p class="text-muted small mt-1">Kamida matn yoki fayl yuborilishi shart.</p>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                                    Javobni yuborish
+                                </button>
+                                <a href="{% url 'moduls:creative_tasks' %}" class="btn btn-link text-decoration-none text-muted">Bekor qilish</a>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-radio-card {
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    .custom-radio-card:hover {
+        background-color: #f8f9fa !important;
+        border-color: #0d6efd !important;
+    }
+    .form-check-input:checked + .form-check-label {
+        font-weight: bold;
+        color: #0d6efd;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Testlar ro'yxati{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <h1 class="display-5 fw-bold text-dark mb-5">🧪 Umumiy Testlar (Kirish/Chiqish)</h1>
+
+    <div class="row g-4">
+        {% for test in tests %}
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0 rounded-4 p-4 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge {% if test.test_type == 'entry' %}bg-info{% else %}bg-danger{% endif %} rounded-pill px-3">
+                            {{ test.get_test_type_display }}
+                        </span>
+                        <small class="text-muted">{{ test.created_at|date:"d.m.Y" }}</small>
+                    </div>
+                    <h4 class="card-title fw-bold mb-4">{{ test.title }}</h4>
+                    <a href="{% url 'tests:submit_test' test.id %}" class="btn btn-primary rounded-pill px-4">
+                        Testni boshlash <i class="bi bi-play-fill ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <h3 class="text-muted">Testlar mavjud emas.</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+</style>
+{% endblock %}

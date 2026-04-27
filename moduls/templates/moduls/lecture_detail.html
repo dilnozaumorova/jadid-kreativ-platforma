@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ lecture.title }}{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden mb-5">
+            {% if lecture.image %}
+            <img src="{{ lecture.image.url }}" class="card-img-top" alt="{{ lecture.title }}"
+                style="height: 400px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body p-5">
+                <h1 class="display-4 fw-bold mb-4">{{ lecture.title }}</h1>
+                <hr class="my-4">
+                <div class="lecture-content fs-5 mb-5" style="line-height: 1.8; white-space: pre-wrap;">
+                    {{ lecture.content }}
+                </div>
+
+                {% if questions %}
+                <div class="test-section mt-5 p-4 bg-light rounded-4 border border-primary border-opacity-25">
+                    <h2 class="h3 fw-bold mb-4 text-primary">
+                        <i class="bi bi-pencil-square me-2"></i> Maruza testi
+                    </h2>
+
+                    {% if not show_form and user_result %}
+                    <div
+                        class="alert {% if is_passed %}alert-success{% else %}alert-danger{% endif %} rounded-4 p-4 border-0 shadow-sm mb-0">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-grow-1">
+                                <h4 class="alert-heading fw-bold mb-1">
+                                    {% if is_passed %}
+                                    <i class="bi bi-check-circle-fill me-2"></i> Tabriklaymiz! Siz o'tdingiz.
+                                    {% else %}
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Afsuski, siz o'ta olmadingiz.
+                                    {% endif %}
+                                </h4>
+                                <p class="mb-0 fs-5">
+                                    Natijangiz: <strong>{{ user_result.score }} / {{ user_result.total_questions
+                                        }}</strong>
+                                    (<span class="fw-bold">{{ percentage|floatformat:1 }}%</span>)
+                                </p>
+                                <p class="text-muted small mt-2">
+                                    Urinishlar soni: <strong>{{ attempt_count }}</strong>
+                                </p>
+                            </div>
+                            <div class="fs-1 opacity-50">
+                                {% if is_passed %}
+                                <i class="bi bi-patch-check-fill text-success"></i>
+                                {% else %}
+                                <i class="bi bi-x-circle-fill text-danger"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <a href="{% url 'moduls:lecture_list' %}"
+                                    class="btn btn-dark w-100 rounded-pill shadow-sm">
+                                    <i class="bi bi-arrow-left me-2"></i> Ro'yxatga qaytish
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="?retake=1" class="btn btn-outline-primary w-100 rounded-pill shadow-sm">
+                                    <i class="bi bi-arrow-counterclockwise me-2"></i> Qaytadan ishlash
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-4">Iltimos, har bir savol uchun to'g'ri javobni tanlang.
+                        {% if attempt_count > 0 %}
+                        <br><span class="badge bg-info text-dark mt-2">Bu sizning {{ attempt_count|add:1
+                            }}-urinishingiz</span>
+                        {% endif %}
+                    </p>
+
+                    <form action="{% url 'moduls:submit_lecture_test' lecture.id %}" method="post"
+                        class="mcq-test-form">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="card border-0 shadow-sm mb-4 rounded-3 p-3">
+                            <label class="form-label fw-bold text-dark mb-3">{{ forloop.counter }}. {{ field.label }}</label>
+
+                            <div class="options-group ps-3">
+                                {% for radio in field %}
+                                <div class="form-check mb-2 py-1">
+                                    {{ radio.tag }}
+                                    <label class="form-check-label ms-2 cursor-pointer" for="{{ radio.id_for_label }}">
+                                        {{ radio.choice_label }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if field.errors %}
+                            <div class="text-danger mt-1 small">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        <div class="d-grid mt-4 gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                                Natijani yuborish <i class="bi bi-send-fill ms-2"></i>
+                            </button>
+                            {% if user_result %}
+                            <a href="{% url 'moduls:lecture_detail' lecture.id %}" class="btn btn-link text-muted">Bekor
+                                qilish</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .mcq-test-form .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .mcq-test-form .card {
+        transition: all 0.3s ease;
+    }
+
+    .mcq-test-form .card:hover {
+        background-color: #f8f9fa;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

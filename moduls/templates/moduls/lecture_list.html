@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Maruzalar{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="display-5 fw-bold text-dark">📖 Maruzalar</h1>
+    </div>
+
+    <div class="row g-4">
+        {% for lecture in lectures %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4 hover-lift {% if lecture.id not in unlocked_lectures %}opacity-75{% endif %}" style="position: relative;">
+                {% if lecture.id not in unlocked_lectures %}
+                    <div class="position-absolute top-0 end-0 m-3 z-3">
+                        <span class="badge bg-danger rounded-pill px-3 py-2 shadow-sm">
+                            <i class="bi bi-lock-fill me-1"></i> Yopiq
+                        </span>
+                    </div>
+                {% endif %}
+                
+                {% if lecture.image %}
+                    <img src="{{ lecture.image.url }}" class="card-img-top rounded-top-4" alt="{{ lecture.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4" style="height: 200px;">
+                        <i class="bi bi-journal-text display-1 text-primary opacity-25"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-3">{{ lecture.title }}</h5>
+                    <p class="card-text text-muted small mb-4">
+                        {{ lecture.content|truncatewords:20 }}
+                    </p>
+                    
+                    {% if lecture.id in unlocked_lectures %}
+                        <a href="{% url 'moduls:lecture_detail' lecture.id %}" class="btn btn-primary rounded-pill w-100">
+                            O'qishni boshlash <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary rounded-pill w-100" disabled>
+                            <i class="bi bi-lock-fill me-1"></i> Yopiq
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="display-1 text-muted mb-4 opacity-25"><i class="bi bi-inbox"></i></div>
+            <h3 class="text-muted">Hozircha maruzalar mavjud emas.</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+</style>
+{% endblock %}

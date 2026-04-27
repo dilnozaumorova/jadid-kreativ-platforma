@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Jadid Kreativ Platforma - Bosh Sahifa{% endblock %}
+
+{% block content %}
+<div class="container pb-5">
+    <!-- Hero Section -->
+    <div class="hero-wrapper mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7 hero-content">
+                <div class="welcome-badge">
+                    <div class="user-avatar">J</div>
+                    <span class="small fw-bold text-uppercase">Xorazm Jadidlari Merosi</span>
+                </div>
+                <h1 class="display-3 fw-bold mb-3">JADID KREATIV PLATFORMA</h1>
+                <p class="lead fw-bold text-primary mb-4">
+                    Xorazm jadidlarining pedagogik qarashlari asosida talabalarning badiiy-kreativ kompetensiyalarini rivojlantirish muhiti
+                </p>
+                <p class="text-muted mb-4" style="line-height: 1.8; font-size: 1.1rem;">
+                    XIX–XX asr Xorazm jadid ma’rifatparvarlarining ta’limga oid ilg‘or g‘oyalari zamonaviy pedagogik texnologiyalar bilan uyg‘unlashtirilgan ushbu platforma talabalarda badiiy-kreativ tafakkur, mustaqil fikrlash va ijodiy faoliyatni rivojlantirishga xizmat qiladi.
+                </p>
+                <div class="d-flex gap-3">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-5 shadow-sm">Hoziroq qo'shiling</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-dark btn-lg px-5">Kirish</a>
+                    {% else %}
+                        <a href="{% url 'moduls:lecture_list' %}" class="btn btn-primary btn-lg px-5 shadow-sm">O'rganishni boshlang</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="position-relative">
+                    <div class="module-card shadow-lg p-0 overflow-hidden" style="border-radius: 30px;">
+                        <img src="{% static 'img/bg-khiva.jpg' %}" class="img-fluid" alt="Khiva" style="height: 450px; object-fit: cover; opacity: 0.9;">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
+                            <h4 class="mb-0">Xorazm jadid ma'rifatparvarligi</h4>
+                            <p class="small opacity-75">Tarix va zamonaviylik uyg'unligi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4 text-center bg-white" style="border-radius: 20px;">
+                <h2 class="fw-bold text-primary mb-3">XUSH KELIBSIZ!</h2>
+                <p class="lead text-dark mx-auto" style="max-width: 900px;">
+                    Siz “Jadid kreativ platforma”ning faol ishtirokchisiga aylandingiz. Ushbu muhitda siz jadidlar merosini chuqur o‘rganish orqali badiiy tafakkuringizni rivojlantirasiz hamda kreativ topshiriqlar orqali bilimlaringizni amaliy faoliyatda namoyon etasiz.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="module-card">
+                <div class="icon-box icon-blue">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">TARIXIY-METODOLOGIK ASOS</h4>
+                <p class="text-muted">
+                    Platforma mazmuni Xorazm jadidlarining pedagogik qarashlari, ularning ta’limni modernizatsiya qilishga qaratilgan yondashuvlari hamda milliy-ma’rifiy merosiga tayanadi.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="module-card">
+                <div class="icon-box icon-purple">
+                    <i class="bi bi-lightbulb-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">KREATIV RIVOJLANISH MUHITI</h4>
+                <p class="text-muted">
+                    Platforma badiiy-kreativ kompetensiyalarni rivojlantirishga yo‘naltirilgan interaktiv topshiriqlar, muammoli vaziyatlar va innovatsion metodlar asosida qurilgan.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="module-card">
+                <div class="icon-box icon-pink">
+                    <i class="bi bi-cpu-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">TA’LIMIY INTEGRATSIYA VA AMALIYOT</h4>
+                <p class="text-muted">
+                    Platformada ma’ruza, amaliy mashg‘ulot, mustaqil ta’lim va interaktiv faoliyatlar o‘zaro uzviy bog‘langan holda tashkil etilgan.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Text Block -->
+    <div class="row">
+        <div class="col-12">
+            <div class="p-5 bg-dark text-white shadow-lg" style="border-radius: 30px; background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h3 class="fw-bold mb-4">Nazariya va amaliyot integratsiyasi</h3>
+                        <p class="opacity-75 mb-0" style="font-size: 1.1rem; line-height: 1.8;">
+                            Ushbu jarayonda talabalar mustaqil fikrlash, ijodiy yondashish va yangi g‘oyalar ishlab chiqish ko‘nikmalarini egallaydi. Platforma har bir foydalanuvchini izlanish, tahlil va yaratuvchanlik jarayoniga faol jalb etadi.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                        <a href="{% url 'moduls:lecture_list' %}" class="btn btn-light btn-lg px-5 fw-bold" style="border-radius: 15px;">Darslarni ko'rish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

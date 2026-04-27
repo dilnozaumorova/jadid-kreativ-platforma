@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4 p-4">
+                <div class="card-body">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'moduls:seminar_list' %}" class="text-decoration-none">Seminarlar</a></li>
+                            {% if question.seminar %}
+                            <li class="breadcrumb-item"><a href="{% url 'moduls:seminar_detail' question.seminar.id %}" class="text-decoration-none">{{ question.seminar.title }}</a></li>
+                            {% endif %}
+                            <li class="breadcrumb-item active" aria-current="page">{{ question.title }}</li>
+                        </ol>
+                    </nav>
+
+                    <h2 class="fw-bold text-dark mb-3">{{ question.title }}</h2>
+                    <div class="p-4 bg-light rounded-4 mb-4 border-start border-4 border-primary">
+                        <p class="mb-0 fs-5 text-dark" style="white-space: pre-wrap;">{{ question.content }}</p>
+                    </div>
+
+                    {% if user_submission %}
+                        <div class="alert alert-success rounded-4 p-4 border-0 shadow-sm mb-0">
+                            <h5 class="fw-bold"><i class="bi bi-check-circle-fill me-2"></i> Siz javobingizni topshirgansiz!</h5>
+                            <hr>
+                            {% if question.question_type == 'text' %}
+                                <div class="bg-white p-3 rounded-3 mt-2 text-dark">
+                                    <strong>Sizning javobingiz:</strong><br>
+                                    {{ user_submission.text_answer }}
+                                </div>
+                            {% else %}
+                                <div class="mt-2">
+                                    <strong>Yuborilgan rasm:</strong><br>
+                                    <img src="{{ user_submission.image_answer.url }}" class="img-fluid rounded-3 mt-2 border shadow-sm" style="max-height: 300px;">
+                                </div>
+                            {% endif %}
+                            <div class="mt-3 text-muted small">Topshirilgan vaqt: {{ user_submission.submitted_at|date:"d.m.Y H:i" }}</div>
+                            <a href="{% if question.seminar %}{% url 'moduls:seminar_detail' question.seminar.id %}{% else %}{% url 'moduls:seminar_list' %}{% endif %}" class="btn btn-success mt-4 rounded-pill px-4">Ro'yxatga qaytish</a>
+                        </div>
+                    {% else %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card border-0 bg-light rounded-4 p-4 mb-4">
+                                <h5 class="fw-bold mb-4">Sizning javobingiz</h5>
+                                {% if question.question_type == 'text' %}
+                                    <div class="mb-3">
+                                        <textarea name="text_answer" class="form-control" rows="4" placeholder="Javobingizni shu yerga yozing..." required></textarea>
+                                    </div>
+                                {% else %}
+                                    <div class="mb-3">
+                                        <p class="text-muted mb-2">Javobingizni rasm shaklida yuklang (PNG, JPG, JPEG):</p>
+                                        <input type="file" name="image_answer" class="form-control" accept="image/*" required>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                                    Javobni yuborish
+                                </button>
+                                <a href="{% if question.seminar %}{% url 'moduls:seminar_detail' question.seminar.id %}{% else %}{% url 'moduls:seminar_list' %}{% endif %}" class="btn btn-link text-decoration-none text-muted">
+                                    Bekor qilish
+                                </a>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
