@@ -12,6 +12,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
+     {% block extra_css %}{% endblock %}
 </head>
 <body class="{% if request.resolver_match.url_name == 'home' %}home-page{% endif %}">
     {% include 'navbar.html' %}
