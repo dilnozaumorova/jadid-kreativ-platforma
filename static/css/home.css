@@ -13,7 +13,7 @@
 
 body {
     background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
-                url('/static/img/bg-khiva.jpg') no-repeat center center fixed;
+                url('/static/img/image.png') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
@@ -55,7 +55,7 @@ body {
 body.home-page {
     /* Home page can have a slightly clearer background or keep the same */
     background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
-                url('/static/img/bg-khiva.jpg') no-repeat center center fixed;
+                url('/static/img/image.png') no-repeat center center fixed;
     background-size: cover;
 }
 
