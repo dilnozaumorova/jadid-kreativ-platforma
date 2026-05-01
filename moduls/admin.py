@@ -67,7 +67,7 @@ class PracticeSubmissionAdmin(admin.ModelAdmin):
 
 @admin.register(TableSubmission)
 class TableSubmissionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'table', 'score', 'is_checked', 'submitted_at')
+    list_display = ('user', 'table', 'score', 'is_checked', 'text_answer','submitted_at')
     list_editable = ('score', 'is_checked')
 
 @admin.register(CreativeTask)
@@ -76,7 +76,7 @@ class CreativeTaskAdmin(admin.ModelAdmin):
 
 @admin.register(CreativeTaskSubmission)
 class CreativeTaskSubmissionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'task', 'score', 'is_checked', 'submitted_at')
+    list_display = ('user', 'task', 'score', 'is_checked','text_answer','file_answer', 'submitted_at')
     list_editable = ('score', 'is_checked')
 
 @admin.register(LectureTestResult)

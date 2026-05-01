@@ -33,6 +33,12 @@ class UserRegisterForm(forms.ModelForm):
         if password:
             validate_password(password)
         return cleaned_data
+    def clean_username(self):
+        """Username allaqachon mavjud bo'lsa xato berish"""
+        username = self.cleaned_data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            raise ValidationError("Bu username allaqachon band! Boshqa username tanlang.")
+        return username
     
     def clean_first_name(self):
         first_name=self.cleaned_data.get('first_name')
