@@ -1,0 +1,14 @@
+name: Daytime Ping
+
+on:
+  schedule:
+    - cron: "*/14 6-18 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping website
+        run: curl -s https://jadid-kreativ-platforma.onrender.com/
