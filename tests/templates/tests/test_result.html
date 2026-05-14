@@ -50,13 +50,18 @@
                             </div>
                             <div class="col text-end">
                                 <p class="mb-0 small text-muted">O'qituvchi</p>
-                                <p class="fw-semibold">________________</p>
+                                <p class="fw-semibold">Umarova Dilnoza</p>
                             </div>
                         </div>
                     </div>
                 </div>
             {% endif %}
 
+            <div class="d-grid gap-2 mb-3 no-print">
+                <button type="button" class="btn btn-outline-secondary btn-lg rounded-pill" onclick="window.print()">
+                    Sertifikatni PDF sifatida saqlash
+                </button>
+            </div>
             <div class="d-grid gap-2">
                 <a href="{% url 'moduls:lecture_list' %}" class="btn btn-primary btn-lg rounded-pill">
                     Maruzalarga qaytish
@@ -65,4 +70,23 @@
         </div>
     </div>
 </div>
+
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .card, .card * {
+            visibility: visible;
+        }
+        .card {
+            width: 100%;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
 {% endblock %}
