@@ -344,7 +344,7 @@
                                 </td>
                                 <td>
                                     {% if res.certificate_eligible %}
-                                        <a href="{% url 'tests:test_result' res.id %}" class="btn btn-sm btn-success">Sertifikat</a>
+                                        <a href="{% url 'tests:certificate' res.id %}" class="btn btn-sm btn-success">Sertifikat</a>
                                     {% else %}
                                         <span class="text-muted">Yo'q</span>
                                     {% endif %}

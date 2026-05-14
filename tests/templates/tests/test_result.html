@@ -57,11 +57,13 @@
                 </div>
             {% endif %}
 
-            <div class="d-grid gap-2 mb-3 no-print">
-                <button type="button" class="btn btn-outline-secondary btn-lg rounded-pill" onclick="window.print()">
-                    Sertifikatni PDF sifatida saqlash
-                </button>
-            </div>
+            {% if result.certificate_eligible %}
+                <div class="d-grid gap-2 mb-3">
+                    <a href="{% url 'tests:certificate' result.id %}" class="btn btn-success btn-lg rounded-pill">
+                        Sertifikatni ko'rish va yuklab olish
+                    </a>
+                </div>
+            {% endif %}
             <div class="d-grid gap-2">
                 <a href="{% url 'moduls:lecture_list' %}" class="btn btn-primary btn-lg rounded-pill">
                     Maruzalarga qaytish

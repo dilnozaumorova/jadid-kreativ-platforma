@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Sertifikat{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div id="certificate" class="card border-success shadow-lg text-center p-5 bg-light">
+                <div class="mb-4">
+                    <h1 class="text-success fw-bold mb-3">SERTIFIKAT</h1>
+                    <p class="text-uppercase text-secondary mb-4">Muvaffaqiyatli yakunlaganingiz uchun</p>
+                    <h2 class="fw-bold mb-3">{{ result.user.get_full_name|default:result.user.username }}</h2>
+                    <p class="mb-1 text-muted">quyidagi nazorat testini muvaffaqiyatli topshirdi:</p>
+                    <p class="fw-semibold mb-4">"{{ result.test.title }}"</p>
+                    <p class="mb-4">To'plangan natija: <span class="fw-bold text-success">{{ result.percent }}%</span></p>
+                    <div class="row">
+                        <div class="col text-start">
+                            <p class="mb-0 small text-muted">Berilgan sana</p>
+                            <p class="fw-semibold">{{ result.completed_at|date:"d.m.Y" }}</p>
+                        </div>
+                        <div class="col text-end">
+                            <p class="mb-0 small text-muted">O'qituvchi</p>
+                            <p class="fw-semibold">________________</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button type="button" class="btn btn-primary me-2" onclick="downloadPDF()">
+                    PDF yuklab olish
+                </button>
+                <button type="button" class="btn btn-success" onclick="downloadImage()">
+                    Image yuklab olish
+                </button>
+                <br><br>
+                <a href="{% url 'tests:test_result' result.id %}" class="btn btn-secondary">Orqaga</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+function downloadPDF() {
+    window.print();
+}
+
+function downloadImage() {
+    html2canvas(document.getElementById('certificate')).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'sertifikat.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+</script>
+
+<style>
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #certificate, #certificate * {
+        visibility: visible;
+    }
+    #certificate {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: none !important;
+        box-shadow: none !important;
+        background: white !important;
+    }
+    .btn, .mt-4 {
+        display: none !important;
+    }
+}
+</style>
+{% endblock %}

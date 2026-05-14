@@ -40,3 +40,10 @@ def submit_test(request, test_id):
 def test_result(request, result_id):
     result = get_object_or_404(TestResult, id=result_id, user=request.user)
     return render(request, 'tests/test_result.html', {'result': result})
+
+@login_required
+def certificate(request, result_id):
+    result = get_object_or_404(TestResult, id=result_id, user=request.user)
+    if not result.certificate_eligible:
+        return redirect('tests:test_result', result_id=result.id)
+    return render(request, 'tests/certificate.html', {'result': result})
