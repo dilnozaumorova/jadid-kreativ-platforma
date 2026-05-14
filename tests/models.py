@@ -47,3 +47,13 @@ class TestResult(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.test.title} - {self.score}/{self.total_questions}"
 
+    @property
+    def percent(self):
+        if self.total_questions <= 0:
+            return 0
+        return int(round((self.score / self.total_questions) * 100))
+
+    @property
+    def certificate_eligible(self):
+        return self.test.test_type in ('entry', 'exit') and self.percent > 70
+

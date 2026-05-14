@@ -7,9 +7,10 @@
     <div class="col-md-6 offset-md-3">
         <div class="card shadow-lg border-0 rounded-4 text-center p-5">
             <div class="mb-4">
-                {% if result.score >= 3 %}
+                {% if result.percent > 70 %}
                     <i class="bi bi-patch-check-fill text-success" style="font-size: 5rem;"></i>
                     <h2 class="mt-3 fw-bold text-success">Tabriklaymiz!</h2>
+                    <p class="text-success">Siz testni muvaffaqiyatli topshirdingiz.</p>
                 {% else %}
                     <i class="bi bi-exclamation-circle-fill text-warning" style="font-size: 5rem;"></i>
                     <h2 class="mt-3 fw-bold text-warning">Yaxshiroq o'qishingiz kerak</h2>
@@ -17,18 +18,44 @@
             </div>
 
             <h4 class="text-muted mb-4">Sizning natijangiz:</h4>
-            <div class="display-1 fw-bold mb-4">
+            <div class="display-1 fw-bold mb-2">
                 {{ result.score }} <span class="fs-2 text-muted">/ {{ result.total_questions }}</span>
+            </div>
+            <div class="fs-4 mb-4">
+                <span class="fw-semibold">Foiz:</span> {{ result.percent }}%
             </div>
 
             <div class="progress mb-5" style="height: 10px;">
-                <div class="progress-bar {% if result.score >= 3 %}bg-success{% else %}bg-warning{% endif %}" 
+                <div class="progress-bar {% if result.percent > 70 %}bg-success{% else %}bg-warning{% endif %}" 
                      role="progressbar" 
-                     style="width: {% widthratio result.score result.total_questions 100 %}%" 
-                     aria-valuenow="{{ result.score }}" 
+                     style="width: {{ result.percent }}%" 
+                     aria-valuenow="{{ result.percent }}" 
                      aria-valuemin="0" 
-                     aria-valuemax="{{ result.total_questions }}"></div>
+                     aria-valuemax="100"></div>
             </div>
+
+            {% if result.certificate_eligible %}
+                <div class="card border-success mb-4">
+                    <div class="card-body p-4">
+                        <h1 class="text-center text-success fw-bold mb-3">SERTIFIKAT</h1>
+                        <p class="text-center text-uppercase text-secondary mb-4">Muvaffaqiyatli yakunlaganingiz uchun</p>
+                        <h2 class="text-center fw-bold mb-3">{{ result.user.get_full_name|default:result.user.username }}</h2>
+                        <p class="text-center mb-1 text-muted">quyidagi nazorat testini muvaffaqiyatli topshirdi:</p>
+                        <p class="text-center fw-semibold mb-4">"{{ result.test.title }}"</p>
+                        <p class="text-center mb-4">To'plangan natija: <span class="fw-bold text-success">{{ result.percent }}%</span></p>
+                        <div class="row">
+                            <div class="col text-start">
+                                <p class="mb-0 small text-muted">Berilgan sana</p>
+                                <p class="fw-semibold">{{ result.completed_at|date:"d.m.Y" }}</p>
+                            </div>
+                            <div class="col text-end">
+                                <p class="mb-0 small text-muted">O'qituvchi</p>
+                                <p class="fw-semibold">________________</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="d-grid gap-2">
                 <a href="{% url 'moduls:lecture_list' %}" class="btn btn-primary btn-lg rounded-pill">

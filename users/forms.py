@@ -6,22 +6,50 @@ from users.models import CustomUser
 
 
 class UserRegisterForm(forms.ModelForm):
-    password=forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={'class': 'form-control', 'placeholder': 'Parol'}),label="Parol"
-        )
-    
-    password_confirm = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Parolni tasdiqlang'}),label="Parolni tasdiqlang"
+    first_name = forms.CharField(
+        label="Ism",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ismingizni kiriting'
+        }),
+        help_text="Kamida 3 ta harf kiriting."
     )
+    last_name = forms.CharField(
+        label="Familiya",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Familiyangizni kiriting'
+        }),
+        help_text="Kamida 3 ta harf kiriting."
+    )
+    username = forms.CharField(
+        label="Username",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Username kiriting'
+        }),
+        help_text="Bu username bilan tizimga kirasiz."
+    )
+    password = forms.CharField(
+        label="Parol",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Parol kiriting'
+        }),
+        help_text="Kuchli parol tanlang."
+    )
+    password_confirm = forms.CharField(
+        label="Parolni tasdiqlang",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Parolni tasdiqlang'
+        }),
+        help_text="Yuqoridagi parolni qaytadan kiriting."
+    )
+
     class Meta:
-        model=CustomUser
-        fields=['first_name','last_name','username']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-        }
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'username']
     def clean(self):
         cleaned_data=super().clean()
         password=cleaned_data.get('password')
