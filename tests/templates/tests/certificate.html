@@ -21,7 +21,7 @@
                         </div>
                         <div class="col text-end">
                             <p class="mb-0 small text-muted">O'qituvchi</p>
-                            <p class="fw-semibold">________________</p>
+                            <p class="fw-semibold">Umarova Dilnoza</p>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     PDF yuklab olish
                 </button>
                 <button type="button" class="btn btn-success" onclick="downloadImage()">
-                    Image yuklab olish
+                    Rasm sifatida saqlash
                 </button>
                 <br><br>
                 <a href="{% url 'tests:test_result' result.id %}" class="btn btn-secondary">Orqaga</a>
@@ -42,16 +42,34 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-function downloadPDF() {
-    window.print();
+async function downloadPDF() {
+    const certificateEl = document.getElementById('certificate');
+    const canvas = await html2canvas(certificateEl, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        useCORS: true,
+    });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new window.jspdf.jsPDF({
+        orientation: 'landscape',
+        unit: 'pt',
+        format: [canvas.width, canvas.height],
+    });
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save('sertifikat.pdf');
 }
 
 function downloadImage() {
-    html2canvas(document.getElementById('certificate')).then(function(canvas) {
+    html2canvas(document.getElementById('certificate'), {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        useCORS: true,
+    }).then(function(canvas) {
         var link = document.createElement('a');
         link.download = 'sertifikat.png';
-        link.href = canvas.toDataURL();
+        link.href = canvas.toDataURL('image/png');
         link.click();
     });
 }
